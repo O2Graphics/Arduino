@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/sh
 
 APPDIR="$(dirname -- "$(readlink -f -- "${0}")" )"
 
@@ -24,13 +24,12 @@ if [ -x "$APPDIR/java/bin/java" ]; then
   JAVA=$APPDIR/java/bin/java
 fi
 
-# Collect options to java in an array, to properly handle whitespace in options
-JAVA_OPTIONS=("-DAPP_DIR=$APPDIR")
+JAVA_OPTIONS="$JAVA_OPTIONS -DAPP_DIR=$APPDIR"
 
 # Only show the splash screen when no options are present
-if [[ "$@" != *"--"* ]] ; then
-	JAVA_OPTIONS+=("-splash:$APPDIR/lib/splash.png")
+if [ $# -eq 0 ] ; then
+	JAVA_OPTIONS="$JAVA_OPTIONS -splash:$APPDIR/lib/splash.png"
 fi
 
-"$JAVA" "${JAVA_OPTIONS[@]}" processing.app.Base "$@"
+echo "$JAVA" "${JAVA_OPTIONS}" processing.app.Base "$@"
 
